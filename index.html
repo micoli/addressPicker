@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="demo">
+	<head>
+		<meta charset="utf-8">
+		<title>Address finder</title>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular-sanitize.js"></script>
+
+		<!-- ui-select files -->
+		<link rel="stylesheet" href="./lib/select.css">
+		<script src="./lib/select.js"></script>
+		<script src="./sandbox.js"></script>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.6/lodash.min.js"></script>
+
+		<!-- themes -->
+		<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.default.css">
+		<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.bootstrap2.css"> -->
+		<!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.bootstrap3.css">-->
+
+		<style>
+			body {
+				padding: 15px;
+			}
+
+			.select2 > .select2-choice.ui-select-match {
+				/* Because of the inclusion of Bootstrap */
+				height: 29px;
+			}
+
+			.selectize-control > .selectize-dropdown {
+				top: 36px;
+			}
+			/* Some additional styling to demonstrate that append-to-body helps achieve the proper z-index layering. */
+			.select-box {
+			background: #fff;
+			position: relative;
+			z-index: 1;
+			}
+			.alert-info.positioned {
+			margin-top: 1em;
+			position: relative;
+			z-index: 10000; /* The select2 dropdown has a z-index of 9999 */
+			}
+		</style>
+	</head>
+
+	<body class="ng-cloak" ng-controller="DemoCtrl as ctrl">
+
+		<h3>town UX</h3>
+		<pre>Selected: {{address | json }}</pre>
+		<ui-select
+			ng-model="address.town"
+			theme="bootstrap"
+			style="min-width: 300px;"
+			on-select="onSelectCallback($item)"
+			title="Choose a town">
+			<ui-select-match placeholder="Select a town in the list or search his name/age...">{{$select.selected.name}}</ui-select-match>
+			<ui-select-choices
+				refresh="ctrl.refreshPostcode($select.search);"
+				refresh-delay="300"
+				repeat="town.postcode as city in postcodes">
+			<div ng-bind-html="city.name | highlight: $select.search"></div>
+			<small>
+				town: {{city.name}}
+				postcode: <span ng-bind-html="''+city.postcode | highlight: $select.search"></span>
+			</small>
+			</ui-select-choices>
+		</ui-select>
+		<pre>postcodes = {{postcodes | json }}</pre>
+	</body>
+</html>
