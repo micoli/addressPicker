@@ -11,6 +11,7 @@ app.controller('DemoCtrl', function ($scope, $http, $timeout, $interval) {
 		postcode:"test"
 	}
 	$scope.onSelectCallback = function($item){
+		console.log($item);
 		$scope.address.postcode=$item.postcode;
 		$scope.address.town=$item.name;
 	}
